@@ -11,12 +11,14 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'https://mern-authentication-frontend-spgp.onrender.com',
+    credentials: true
+  }
+));
 
-// {
-//   origin: 'http://localhost:5173',
-//     credentials: true;
-// }
+
 
 app.use('/api/auth', authRoutes);
 
