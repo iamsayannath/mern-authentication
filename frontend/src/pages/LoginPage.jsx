@@ -46,8 +46,12 @@ export default function LoginPage() {
     }
 
     try {
-      let res = await api.post('/auth/login', form);
-      console.log(res);
+      let res = await api.post('/auth/login', form, { withCredentials: true });
+
+      // Store token or user if needed
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
 
       navigate("/");
     } catch (err) {
