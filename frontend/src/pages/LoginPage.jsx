@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api';
 
-export default function LoginPage() {
+export default function LoginPage({ setUser }) {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' });
@@ -12,8 +12,6 @@ export default function LoginPage() {
   const handleChange = e => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-
-    // Clear field-specific error while typing
     setFieldErrors(prev => ({ ...prev, [name]: '' }));
   };
 
@@ -48,9 +46,9 @@ export default function LoginPage() {
     try {
       let res = await api.post('/auth/login', form, { withCredentials: true });
 
-      // Store token or user if needed
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
+      // ✅ set user immediately so App.jsx sees it
+      if (res.data.user) {
+        setUser(res.data.user);
       }
 
       navigate("/");
@@ -69,7 +67,6 @@ export default function LoginPage() {
 
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
-        {/* Email field */}
         <input
           className={`input ${fieldErrors.email ? 'border-red-500' : ''}`}
           type="email"
@@ -82,7 +79,6 @@ export default function LoginPage() {
           <p className="text-red-500 text-xs mt-1">{fieldErrors.email}</p>
         )}
 
-        {/* Password field */}
         <input
           className={`input mt-3 ${fieldErrors.password ? 'border-red-500' : ''}`}
           type="password"

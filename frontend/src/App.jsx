@@ -8,11 +8,13 @@ import api from './api';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ new
 
   useEffect(() => {
     api.get('/auth/me')
       .then(res => setUser(res.data))
-      .catch(() => setUser(null));
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false)); // ✅ no redirect until done
   }, []);
 
   const handleLogout = async () => {
@@ -20,11 +22,13 @@ function App() {
     setUser(null);
   };
 
+  if (loading) return <div className="p-6 text-center">Loading...</div>; // ✅ prevent flash
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage setUser={setUser} />} /> {/* ✅ pass setUser */}
         <Route path="/forgot" element={<ForgotPasswordPage />} />
         <Route
           path="/"
