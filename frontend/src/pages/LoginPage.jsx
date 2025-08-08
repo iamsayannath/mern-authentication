@@ -47,7 +47,7 @@ export default function LoginPage() {
 
     try {
       await api.post('/auth/login', form);
-      navigate('/');
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Try again.');
     }
