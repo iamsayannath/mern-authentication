@@ -46,9 +46,9 @@ export default function LoginPage({ setUser }) {
     try {
       let res = await api.post('/auth/login', form, { withCredentials: true });
 
-      // ✅ set user immediately so App.jsx sees it
       if (res.data.user) {
         setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user)); // optional for persistence
       }
 
       navigate("/");
@@ -56,6 +56,7 @@ export default function LoginPage({ setUser }) {
       setError(err.response?.data?.error || 'Login failed. Try again.');
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">

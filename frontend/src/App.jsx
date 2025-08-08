@@ -11,10 +11,15 @@ function App() {
   const [loading, setLoading] = useState(true); // ✅ new
 
   useEffect(() => {
-    api.get('/auth/me')
-      .then(res => setUser(res.data))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false)); // ✅ no redirect until done
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    } else {
+      api.get("/auth/getUser", { withCredentials: true })
+        .then(res => setUser(res.data.user))
+        .catch(() => setUser(null));
+    }
+    setLoading(false);
   }, []);
 
   const handleLogout = async () => {
