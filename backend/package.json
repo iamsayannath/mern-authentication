@@ -4,7 +4,7 @@
   "description": "its a full mern stack authentication sysytem ",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "sayan nath",
   "license": "ISC",
